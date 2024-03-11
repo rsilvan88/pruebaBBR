@@ -41,26 +41,38 @@ public class TareaController {
 	@ApiOperation("Obtener una tarea por su ID")
 	public ResponseEntity<Tarea> getTareaById(@PathVariable(value = "id") Long tareaId)
 			throws ResourceNotFoundException {
-		@SuppressWarnings("null")
 		Tarea tarea = tareaRepository.findById(tareaId)
 				.orElseThrow(() -> new ResourceNotFoundException("Tarea no encontrada para este id :: " + tareaId));
 		return ResponseEntity.ok().body(tarea);
 	}
 
-	@SuppressWarnings("null")
 	@PostMapping("/tareas")
 	@ApiOperation("Crear una nueva tarea")
 	public Tarea createTarea(@Valid @RequestBody Tarea tarea) {
+
+		if (tarea.getDescripcion() == null || tarea.getFechaCreacion() == null) {
+			throw new IllegalArgumentException("Los campos descripción y fechaCreación son obligatorios");
+		}
+
 		return tareaRepository.save(tarea);
 	}
 
 	@PutMapping("/tareas/{id}")
 	@ApiOperation("Actualizar una tarea existente")
 	public ResponseEntity<Tarea> updateTarea(@PathVariable(value = "id") Long tareaId,
-			@Valid @RequestBody Tarea tareaDetails) throws ResourceNotFoundException {
-		@SuppressWarnings("null")
+		@Valid @RequestBody Tarea tareaDetails) throws ResourceNotFoundException {
+
 		Tarea tarea = tareaRepository.findById(tareaId)
 				.orElseThrow(() -> new ResourceNotFoundException("Tarea no encontrada para este id :: " + tareaId));
+
+		// Validación de campos
+		if (tareaDetails.getDescripcion() == null || tareaDetails.getDescripcion().isEmpty()) {
+			throw new IllegalArgumentException("La descripción es un campo obligatorio");
+		}
+		if (tareaDetails.getFechaModificacion() == null) {
+			throw new IllegalArgumentException("La fecha de modificación es un campo obligatorio");
+		}
+
 
 		tarea.setDescripcion(tareaDetails.getDescripcion());
 		tarea.setFechaModificacion(tareaDetails.getFechaModificacion());
@@ -70,7 +82,7 @@ public class TareaController {
 		return ResponseEntity.ok(updatedTarea);
 	}
 
-	@SuppressWarnings("null")
+	
 	@DeleteMapping("/tareas/{id}")
 	@ApiOperation("Eliminar una tarea existente")
 	public Map<String, Boolean> deleteTarea(@PathVariable(value = "id") Long tareaId)
@@ -78,9 +90,9 @@ public class TareaController {
 		Tarea tarea = tareaRepository.findById(tareaId)
 				.orElseThrow(() -> new ResourceNotFoundException("Tarea no encontrada para este id :: " + tareaId));
 
-				tareaRepository.delete(tarea);
+		tareaRepository.delete(tarea);
 		Map<String, Boolean> response = new HashMap<>();
-		response.put("deleted", Boolean.TRUE);
+		response.put("Tarea eliminada correctamente", Boolean.TRUE);
 		return response;
 	}
 }
