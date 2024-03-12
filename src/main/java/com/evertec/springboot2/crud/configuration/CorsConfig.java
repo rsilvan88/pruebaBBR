@@ -11,19 +11,19 @@ public class CorsConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/api/v1/tareas/**")
-                .allowedOrigins("https://evertec-frontend.vercel.app", "http://localhost:3000")
+                .allowedOrigins("https://ambitious-ocean-092d6240f.5.azurestaticapps.net")
                 .allowedMethods("GET", "POST", "PUT", "DELETE")
                 .allowedHeaders("*")
                 .allowCredentials(true);
         
         registry.addMapping("/auth")
-                .allowedOrigins("https://evertec-frontend.vercel.app", "http://localhost:3000")
+                .allowedOrigins("https://ambitious-ocean-092d6240f.5.azurestaticapps.net")
                 .allowedMethods("POST")
                 .allowedHeaders("*")
                 .allowCredentials(true);
         
         registry.addMapping("/validateAuth")
-                .allowedOrigins("https://evertec-frontend.vercel.app", "http://localhost:3000")
+                .allowedOrigins("https://ambitious-ocean-092d6240f.5.azurestaticapps.net")
                 .allowedMethods("POST")
                 .allowedHeaders("*")
                 .allowCredentials(true);
